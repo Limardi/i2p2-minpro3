@@ -47,6 +47,7 @@ class State{
     Board board;
     int player = 0;
     std::vector<Move> legal_actions;
+    int state_value;
     
     State(){};
     State(int player): player(player){};

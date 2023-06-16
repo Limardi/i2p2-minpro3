@@ -17,10 +17,28 @@ Move one::get_move(State *state, int depth){
   
   auto actions = state->legal_actions;
 
+  
   int k = depth;
-  for(int i = 0; i < depth; i + 1){
+  for(int i = 0; i < depth; i++){
     k = rand()/k;
   }
+  
+  State* tmp;
+  Move ret = actions[k%actions.size()]; // in case all the value is the same(not yet minimax / alpha prune)
 
-  return actions[k%actions.size()];
+  int max = 0;
+
+  for(Move i : actions){
+    
+      tmp = state -> next_state(i);
+      tmp -> evaluate();
+    
+      if(tmp -> state_value > max){
+        max = tmp -> state_value;
+        ret = i;
+      }
+    
+  }
+
+  return ret;
 }

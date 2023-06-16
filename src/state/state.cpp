@@ -5,15 +5,50 @@
 #include "./state.hpp"
 #include "../config.hpp"
 
-
+int pieceval[7] = {0, 1, 5, 3, 3, 9, 30};
 /**
  * @brief evaluate the state
  * 
  * @return int 
  */
+
 int State::evaluate(){
   // [TODO] design your own evaluation function
-  return 0;
+
+  // count piece only
+  auto self_board = this->board.board[this->player];
+  auto oppn_board = this->board.board[1 - this->player];
+  
+  int ret;
+  int op;
+  int sp;
+
+  for(int i = 0; i < BOARD_H; i++){
+    for(int j = 0; j < BOARD_W; j++){
+          int self_piece = self_board[i][j];
+          int oppn_piece = oppn_board[i][j];
+          
+          if(self_piece){
+              sp += pieceval[self_piece];
+          }
+
+          if(oppn_piece){
+              op += pieceval[oppn_piece];
+          }
+
+    }
+  }
+  
+  if(sp < 30){
+    this -> state_value = -100000; // player no king
+  }
+  else if(op < 30){
+    this -> state_value = 100000; // oppn no king
+  }
+  else{
+    ret = sp - op;
+    this -> state_value = ret;
+  }
 }
 
 
@@ -40,7 +75,7 @@ State* State::next_state(Move move){
   next.board[this->player][to.first][to.second] = moved;
   
   State* next_state = new State(next, 1-this->player);
-  
+
   if(this->game_state != WIN)
     next_state->get_legal_actions();
   return next_state;
@@ -207,7 +242,7 @@ void State::get_legal_actions(){
       }
     }
   }
-  std::cout << "\n";
+  // std::cout << "\n";
   this->legal_actions = all_actions;
 }
 
