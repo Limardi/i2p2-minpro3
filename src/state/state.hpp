@@ -47,7 +47,6 @@ class State{
     Board board;
     int player = 0;
     std::vector<Move> legal_actions;
-    int state_value;
     
     State(){};
     State(int player): player(player){};
@@ -59,6 +58,7 @@ class State{
     void get_legal_actions();
     std::string encode_output();
     std::string encode_state();
+    std::vector<State> childstate;
 };
 
 #endif

@@ -5,7 +5,7 @@
 #include "./state.hpp"
 #include "../config.hpp"
 
-int pieceval[7] = {0, 1, 5, 3, 3, 9, 30};
+int pieceval[7] = {0, 1, 6, 7, 8, 20, 100};
 /**
  * @brief evaluate the state
  * 
@@ -20,8 +20,8 @@ int State::evaluate(){
   auto oppn_board = this->board.board[1 - this->player];
   
   int ret;
-  int op;
-  int sp;
+  int op = 0;
+  int sp = 0;
 
   for(int i = 0; i < BOARD_H; i++){
     for(int j = 0; j < BOARD_W; j++){
@@ -38,17 +38,17 @@ int State::evaluate(){
 
     }
   }
+
+  if(sp < 100){ //our king is dead
+    return -1000000;
+  }
   
-  if(sp < 30){
-    this -> state_value = -100000; // player no king
+  if(op < 100){ // op king is dead
+    return 1000000;
   }
-  else if(op < 30){
-    this -> state_value = 100000; // oppn no king
-  }
-  else{
-    ret = sp - op;
-    this -> state_value = ret;
-  }
+
+  ret = op - sp;
+  return ret;
 }
 
 

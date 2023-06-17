@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include<iostream>
 
 #include "../state/state.hpp"
 #include "./one.hpp"
@@ -11,6 +12,7 @@
  * @param depth You may need this for other policy
  * @return Move 
  */
+
 Move one::get_move(State *state, int depth){
   if(!state->legal_actions.size())
     state->get_legal_actions();
@@ -24,17 +26,17 @@ Move one::get_move(State *state, int depth){
   }
   
   State* tmp;
-  Move ret = actions[k%actions.size()]; // in case all the value is the same(not yet minimax / alpha prune)
+  Move ret; //= actions[k%actions.size()]; // in case all the value is the same(not yet minimax / alpha prune)
 
-  int max = 0;
+  int max = -100000;
 
   for(Move i : actions){
     
       tmp = state -> next_state(i);
-      tmp -> evaluate();
-    
-      if(tmp -> state_value > max){
-        max = tmp -> state_value;
+      int val = tmp -> evaluate();
+
+      if(val > max){
+        max = val;
         ret = i;
       }
     
