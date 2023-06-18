@@ -28,7 +28,7 @@ int minimax(State *state, int depth, bool mm){
   int val, ret;
 
   if(mm){
-    ret = -100000;
+    ret = -1000000;
     for(auto i : actions){
         tmp = state -> next_state(i);
         val = minimax(tmp, depth - 1, false); 
@@ -67,10 +67,12 @@ Move two::get_move(State *state, int depth){
   State* tmp;
   Move ret; //= actions[k%actions.size()]; // in case all the value is the same(not yet minimax / alpha prune)
 
-  int max = -100000;
+  int max;
 
-  for(Move i : actions){
-    
+  if(!state -> player){
+    max = -1000000;
+    for(Move i : actions){
+      
       tmp = state -> next_state(i);
       int val = minimax(tmp, depth - 1, false);
 
@@ -79,7 +81,23 @@ Move two::get_move(State *state, int depth){
         ret = i;
       }
     
+    }
   }
+  else{
+    max = 1000000;
+    for(Move i : actions){
+      
+      tmp = state -> next_state(i);
+      int val = minimax(tmp, depth - 1, true);
+
+      if(val < max){
+        max = val;
+        ret = i;
+      }
+    
+    }
+  }
+  
 
   return ret;
 }

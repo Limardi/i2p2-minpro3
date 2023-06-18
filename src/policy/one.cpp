@@ -28,9 +28,11 @@ Move one::get_move(State *state, int depth){
   State* tmp;
   Move ret; //= actions[k%actions.size()]; // in case all the value is the same(not yet minimax / alpha prune)
 
-  int max = -100000;
+  int max;
 
-  for(Move i : actions){
+  if(!state -> player){
+    max = -100000;
+    for(Move i : actions){
     
       tmp = state -> next_state(i);
       int val = tmp -> evaluate();
@@ -39,8 +41,22 @@ Move one::get_move(State *state, int depth){
         max = val;
         ret = i;
       }
-    
+    }
   }
+  else{
+    max = 1000000;
+    for(Move i : actions){
+    
+      tmp = state -> next_state(i);
+      int val = tmp -> evaluate();
+
+      if(val < max){
+        max = val;
+        ret = i;
+      }
+    }
+  }
+  
 
   return ret;
 }

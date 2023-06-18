@@ -16,38 +16,30 @@ int State::evaluate(){
   // [TODO] design your own evaluation function
 
   // count piece only
-  auto self_board = this->board.board[this->player];
-  auto oppn_board = this->board.board[1 - this->player];
+  auto white_board = this->board.board[0];
+  auto black_board = this->board.board[1];
   
   int ret;
-  int op = 0;
-  int sp = 0;
+  int bp = 0;
+  int wp = 0;
 
   for(int i = 0; i < BOARD_H; i++){
     for(int j = 0; j < BOARD_W; j++){
-          int self_piece = self_board[i][j];
-          int oppn_piece = oppn_board[i][j];
+          int white_piece = white_board[i][j];
+          int black_piece = black_board[i][j];
           
-          if(self_piece){
-              sp += pieceval[self_piece];
+          if(white_piece){
+              wp += pieceval[white_piece];
           }
 
-          if(oppn_piece){
-              op += pieceval[oppn_piece];
+          if(black_piece){
+              bp += pieceval[black_piece];
           }
 
     }
   }
 
-  if(sp < 100){ //our king is dead
-    return -1000000;
-  }
-  
-  if(op < 100){ // op king is dead
-    return 1000000;
-  }
-
-  ret = op - sp;
+  ret = wp - bp;
   return ret;
 }
 
