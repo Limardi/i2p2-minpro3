@@ -3,7 +3,7 @@
 
 #include "../config.hpp"
 #include "../state/state.hpp"
-#include "../policy/three.hpp"
+#include "../policy/four.hpp"
 
 
 State* root;
@@ -38,16 +38,19 @@ void read_board(std::ifstream& fin) {
  * 
  * @param fout 
  */
+
+int depth = 1;
 void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
   while(true) {
     // Choose a random spot.
-    auto move = three::get_move(root, 6);
+    auto move = four::get_move(root, depth);
     fout << move.first.first << " " << move.first.second << " "\
          << move.second.first << " " << move.second.second << std::endl;
     
     // Remember to flush the output to ensure the last action is written to file.
     fout.flush();
+    depth+=1;
     break;
   }
 }
