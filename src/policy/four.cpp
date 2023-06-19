@@ -13,7 +13,7 @@
  * @return Move 
  */
 
-int minimax(State *state, int depth, bool mm, int alpha, int beta){
+int minimax2(State *state, int depth, bool mm, int alpha, int beta){
 
   if(!state->legal_actions.size())
     state->get_legal_actions();
@@ -30,7 +30,7 @@ int minimax(State *state, int depth, bool mm, int alpha, int beta){
   if(mm){
     for(auto i : actions){
         tmp = state -> next_state(i);
-        val = minimax(tmp, depth - 1, false, alpha, beta); 
+        val = minimax2(tmp, depth - 1, false, alpha, beta); 
         if(val > alpha){
           alpha = val;
         }
@@ -43,7 +43,7 @@ int minimax(State *state, int depth, bool mm, int alpha, int beta){
   else{
     for(auto i : actions){
         tmp = state -> next_state(i);
-        val = minimax(tmp, depth - 1, true, alpha, beta); 
+        val = minimax2(tmp, depth - 1, true, alpha, beta); 
         if(val < beta){
           beta = val;
         }
@@ -76,7 +76,7 @@ Move four::get_move(State *state, int depth){
     for(Move i : actions){
       
       tmp = state -> next_state(i);
-      int val = minimax(tmp, depth - 1, false, alpha, beta);
+      int val = minimax2(tmp, depth - 1, false, alpha, beta);
       if(val > max){
         max = val;
         ret = i;
@@ -93,7 +93,7 @@ Move four::get_move(State *state, int depth){
     for(Move i : actions){
       
       tmp = state -> next_state(i);
-      int val = minimax(tmp, depth - 1, true, alpha, beta);
+      int val = minimax2(tmp, depth - 1, true, alpha, beta);
 
       if(val < max){
         max = val;
