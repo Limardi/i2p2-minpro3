@@ -57,7 +57,7 @@ int minimax(State *state, int depth, bool mm, int alpha, int beta){
   
 }
 
-Move four::get_move(State *state, int depth){
+Move three::get_move(State *state, int depth){
   if(!state->legal_actions.size())
     state->get_legal_actions();
   
