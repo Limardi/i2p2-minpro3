@@ -80,10 +80,10 @@ Move four::get_move(State *state, int depth){
       if(val > max){
         max = val;
         ret = i;
+        alpha = val;
       }
       if(alpha > val){
-        alpha = val;
-        ret = i;
+        break;
       }
     
     }
@@ -98,11 +98,11 @@ Move four::get_move(State *state, int depth){
       if(val < max){
         max = val;
         ret = i;
+        beta = val;
       }
 
       if(beta < val){
-          beta = val;
-          ret = i;
+          break;
       }
     
     }
