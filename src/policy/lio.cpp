@@ -3,7 +3,6 @@
 #include <climits>
 #include "../state/state.hpp"
 #include "./lio.hpp"
-int max = 2;
 /**
  * @brief Randomly get a legal action
  *
@@ -11,12 +10,13 @@ int max = 2;
  * @param depth You may need this for other policy
  * @return Move
  */
-double minimax_alpha_beta(State *root, int depth, bool state, double alpha, double beta, int player)
+double alpha_beta(State *root, int depth, bool state, double alpha, double beta)
 {
 
     // cout << "==========" << " DEPTH LEVEL " << depth << " ==========" << endl;
-
-    if (depth <= 0)
+    if (!root->legal_actions.size())
+        root->get_legal_actions();
+    if (depth <= 0 || !root->legal_actions.size())
     {
         // std::cout << "swc " << root->evaluate() << "dwdw";
         return root->evaluate();
@@ -25,14 +25,12 @@ double minimax_alpha_beta(State *root, int depth, bool state, double alpha, doub
     // MAXIMIZING
     else if (state)
     {
-        if (!root->legal_actions.size())
-            root->get_legal_actions();
         auto actions = root->legal_actions;
         for (auto action : actions)
         {
             State *nextState = root->next_state(action);
-            double val = minimax_alpha_beta(nextState, depth - 1, 0, alpha, beta, player);
-            //std::cout << "val = " << val << " " << std::endl;
+            double val = alpha_beta(nextState, depth - 1, 0, alpha, beta);
+            // std::cout << "val = " << val << " " << std::endl;
             if (val > alpha)
             {
                 alpha = val;
@@ -42,20 +40,18 @@ double minimax_alpha_beta(State *root, int depth, bool state, double alpha, doub
                 break;
             }
         }
-        //std::cout << "max val = " << alpha << " " << std::endl;
+        // std::cout << "max val = " << alpha << " " << std::endl;
         return alpha;
     }
     // MINIMIZING
     else
     {
-        if (!root->legal_actions.size())
-            root->get_legal_actions();
         auto actions = root->legal_actions;
         for (auto action : actions)
         {
             State *nextState = root->next_state(action);
-            double val = minimax_alpha_beta(nextState, depth - 1, 1, alpha, beta, player);
-            //std::cout << "val = " << val << " " << std::endl;
+            double val = alpha_beta(nextState, depth - 1, 1, alpha, beta);
+            // std::cout << "val = " << val << " " << std::endl;
             if (val < beta)
             {
                 beta = val;
@@ -65,7 +61,7 @@ double minimax_alpha_beta(State *root, int depth, bool state, double alpha, doub
                 break;
             }
         }
-        //std::cout << "min val = " << beta << " " << std::endl;
+        // std::cout << "min val = " << beta << " " << std::endl;
         return beta;
     }
 }
@@ -73,8 +69,8 @@ Move playerColor(int player, State *state, int depth)
 {
     if (!state->legal_actions.size())
         state->get_legal_actions();
-
-    int same = 0;
+    double alpha = -1046;
+    double beta = 1046;
     Move retMove;
     auto actions = state->legal_actions;
     if (player == 0)
@@ -83,17 +79,18 @@ Move playerColor(int player, State *state, int depth)
         for (auto action : actions)
         {
             State *nextState = state->next_state(action);
-            double temp = minimax_alpha_beta(nextState, depth, 0, -1046, 1046, player);
-            //std::cout << temp << std::endl;
+            double temp = alpha_beta(nextState, depth - 1, false, alpha, beta);
+            // std::cout << temp << std::endl;
             if (temp > now)
             {
-                same++;
+                alpha = temp;
                 now = temp;
                 retMove = action;
             }
-            else if (temp == now)
+            if (alpha >= beta)
             {
-                same++;
+
+                break;
             }
         }
         return retMove;
@@ -104,13 +101,17 @@ Move playerColor(int player, State *state, int depth)
         for (auto action : actions)
         {
             State *nextState = state->next_state(action);
-            double temp = minimax_alpha_beta(nextState, depth, 1, -1046, 1046, player);
-            //std::cout << temp << std::endl;
+            double temp = alpha_beta(nextState, depth - 1, true, alpha, beta);
+            // std::cout << temp << std::endl;
             if (temp < now)
             {
-                same++;
+                beta = temp;
                 now = temp;
                 retMove = action;
+            }
+            if (alpha >= beta)
+            {
+                break;
             }
         }
         return retMove;

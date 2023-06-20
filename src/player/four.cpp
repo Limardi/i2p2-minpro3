@@ -39,7 +39,7 @@ void read_board(std::ifstream& fin) {
  * @param fout 
  */
 
-int depth = 6;
+int depth = 4;
 void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
   while(true) {
