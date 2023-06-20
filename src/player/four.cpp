@@ -39,7 +39,7 @@ void read_board(std::ifstream& fin) {
  * @param fout 
  */
 
-int depth = 4;
+int depth = 6;
 void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
   while(true) {
@@ -50,7 +50,7 @@ void write_valid_spot(std::ofstream& fout) {
     
     // Remember to flush the output to ensure the last action is written to file.
     fout.flush();
-    if(depth == 8){
+    if(depth == 10){
       break;
     }
     else{
